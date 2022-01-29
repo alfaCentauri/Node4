@@ -13,5 +13,14 @@ request({
     url: url,
     json: true
 }, (error, response, body ) =>{ 
-    console.log( JSON.stringify(body, undefined, 1) ); 
+    if( body.status === 'OK' ){
+        console.log( JSON.stringify(body, undefined, 1) ); 
+        console.log( JSON.stringify(body.result[0].formatted_address) ); 
+        console.log( JSON.stringify(body.result[0].geometry.location.lat) ); 
+        console.log( JSON.stringify(body.result[0].geometry.location.lng) ); 
+    }
+    else if(error) {
+        console.error(error);
+    }
+    
 });
