@@ -1,40 +1,17 @@
 const libreriaMensajes = require('./libreria');
-const http = require('http');
+const request = require('request');
+const argv = require('yargs').argv;
 
-console.log("Ejemplo #4: Depurando desde nodejs.");
+console.log("Ejemplo #4: Utilizando request desde nodejs.");
 libreriaMensajes.saludo;
 
-const postData = JSON.stringify({
-    'msg': 'Automovil'
-  });
+let direccion = argv.direccion;
+let apikey = "";
+let url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+direccion+'&key='+apikey;
 
-const options = {
-    hostname: 'www.google.com',
-    port: 80,
-    path: '/upload',
-    method: 'POST',
-    headers: {
-    'Content-Type': 'application/json',
-    'Content-Length': Buffer.byteLength(postData)
-    }
-};
-
-const req = http.request(options, (res) => {
-    console.log(`STATUS: ${res.statusCode}`);
-    console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-    res.setEncoding('utf8');
-    res.on('data', (chunk) => {
-        console.log(`BODY: ${chunk}`);
-    });
-    res.on('end', () => {
-        console.log('No more data in response.');
-    });
+request({
+    url: url,
+    json: true
+}, (error, response, body ) =>{ 
+    console.log( JSON.stringify(body, undefined, 1) ); 
 });
-    
-req.on('error', (e) => {
-    console.error(`problem with request: ${e.message}`);
-});
-// Write data to request body
-req.write(postData);
-req.end();
-    
